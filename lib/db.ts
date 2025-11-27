@@ -9,5 +9,5 @@ if (!(global as any).pgPool) {
         connectionTimeoutMillis: 50000
     })
 }
-const pool = (global as any).pgPool;
+const pool: Pool = (global as any).pgPool;
 export default pool;
