@@ -119,4 +119,8 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  a {
+    @apply text-xs italic text-blue-500
+  }
 }

@@ -5,6 +5,7 @@ import { DottedGlowBackground } from "@/components/ui/dotted-glow-background";
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
 import { WavyBackground } from "@/components/ui/wavy-background";
 import { GridBackground } from "@/components/ui/grid-background";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
       >
         <GridBackground />
         {children}
+        <Toaster />
       </body>
     </html >
   );
