@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { signUpAction } from '../authActions';
+import { loginAction, signUpAction } from '../authActions';
 import { loginSchema } from '../authSchemas';
 import { toast } from 'sonner';
 
@@ -24,7 +24,11 @@ export default function LoginPage() {
     )
     async function handleSubmit(data: z.infer<typeof loginSchema>) {
         try {
-            const res = await signUpAction(data)
+            const res = await loginAction(data)
+            if (!res.success) {
+                toast.error(res.message)
+                return
+            }
             console.log(res);
 
         } catch (error) {
