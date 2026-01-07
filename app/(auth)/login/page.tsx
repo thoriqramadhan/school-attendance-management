@@ -7,8 +7,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { signUpAction } from '../action';
-import { loginSchema } from '../schema';
+import { signUpAction } from '../authActions';
+import { loginSchema } from '../authSchemas';
 import { toast } from 'sonner';
 
 
@@ -48,10 +48,10 @@ export default function LoginPage() {
                                 <Input type='password' required {...field} />
                                 <FormMessage />
                             </FormItem>} />
-                            <Button type='submit' className='w-full'>Submit</Button>
+                            <Button type='submit' className='w-full'>Login</Button>
                         </form>
                         <div className="w-full mt-3 flex justify-end">
-                            <Link className='text-end' href='/register' >Already have an account?</Link>
+                            <Link className='text-end' href='/register' >didn't have an account?</Link>
                         </div>
                     </Form>
                 </div>
