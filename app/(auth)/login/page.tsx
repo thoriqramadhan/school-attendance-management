@@ -10,9 +10,11 @@ import Link from 'next/link';
 import { loginAction, signUpAction } from '../authActions';
 import { loginSchema } from '../authSchemas';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 
 export default function LoginPage() {
+    const router = useRouter()
     const form = useForm<z.infer<typeof loginSchema>>(
         {
             resolver: zodResolver(loginSchema),
@@ -29,8 +31,7 @@ export default function LoginPage() {
                 toast.error(res.message)
                 return
             }
-            console.log(res);
-
+            router.push('/dashboard')
         } catch (error) {
             toast.error('Failed login')
         }

@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { DottedGlowBackground } from "@/components/ui/dotted-glow-background";
-import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
-import { WavyBackground } from "@/components/ui/wavy-background";
 import { GridBackground } from "@/components/ui/grid-background";
 import { Toaster } from "sonner";
 

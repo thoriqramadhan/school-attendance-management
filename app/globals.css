@@ -124,3 +124,9 @@
     @apply text-xs italic text-blue-500
   }
 }
+
+@layer components {
+  .transition-300 {
+    @apply transition-all duration-300
+  }
+}
