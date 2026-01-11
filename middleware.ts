@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
+import { UUID } from "crypto"
 
 export const runtime = "nodejs"
 
@@ -10,20 +11,29 @@ export function middleware(request: NextRequest) {
     const publicRoutes = ["/login", "/register"]
     const isPublic = publicRoutes.some(p => pathname.startsWith(p))
 
-    if (isPublic && token) {
-        try {
-            jwt.verify(token, process.env.JWT_SECRET!)
-            return NextResponse.redirect(new URL("/", request.url))
-        } catch {
-            return NextResponse.redirect(new URL("/login", request.url))
+    if (!token) {
+        console.log('no token');
+
+        if (!isPublic) {
+            console.log('no token , in private');
+            return NextResponse.redirect(new URL('/login', request.url))
         }
+        return NextResponse.next()
     }
 
-    if (!isPublic && !token) {
-        return NextResponse.redirect(new URL("/login", request.url))
-    }
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { sub: UUID, roleid: number, name: string }
 
-    return NextResponse.next()
+        const response = isPublic ? NextResponse.redirect(new URL('/', request.url)) : NextResponse.next()
+
+        response.headers.set('x-user', JSON.stringify({ id: decoded.sub, roleId: decoded.roleid, name: decoded.name }))
+        console.log('success');
+        return response
+    } catch (error) {
+        request.cookies.delete('access_token')
+        console.log('invalid token');
+        return NextResponse.redirect(new URL('/login', request.url))
+    }
 }
 
 
