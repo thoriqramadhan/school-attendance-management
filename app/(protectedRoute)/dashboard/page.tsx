@@ -3,6 +3,6 @@ import React from 'react'
 
 export default function DashboardPage() {
     return (
-        <SidebarToggle title='Dashboard' />
+        <p></p>
     )
 }

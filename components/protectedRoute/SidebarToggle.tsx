@@ -1,12 +1,15 @@
 'use client'
 import { useSidebar } from '@/lib/context/sidebarContext'
 import { PanelRightClose, PanelRightOpen, SidebarClose } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 import React from 'react'
 
 interface SidebarToggleProps {
     title: string,
 }
-export default function SidebarToggle({ title }: SidebarToggleProps) {
+export default function SidebarToggle({ }) {
+    const pathname = usePathname()
+    const segments = pathname.split('/').filter(segement => segement)
     const { isOpenObject } = useSidebar()
     return (
         <span className='flex gap-x-2 h-fit items-center  p-5'>
@@ -17,7 +20,14 @@ export default function SidebarToggle({ title }: SidebarToggleProps) {
                     )
                 }
             </span>
-            <p>{title}</p>
+            {
+                segments.map((item, i) => (
+                    <span key={i} className='flex gap-x-2'>
+                        {item}
+                        <p>{'/'}</p>
+                    </span>
+                ))
+            }
         </span >
     )
 }
