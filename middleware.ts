@@ -30,9 +30,9 @@ export function middleware(request: NextRequest) {
         console.log('success');
         return response
     } catch (error) {
-        request.cookies.delete('access_token')
-        console.log('invalid token');
-        return NextResponse.redirect(new URL('/login', request.url))
+        const response = NextResponse.redirect(new URL("/login", request.url))
+        response.cookies.delete("access_token")
+        return response
     }
 }
 
