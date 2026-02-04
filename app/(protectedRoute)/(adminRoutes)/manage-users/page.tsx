@@ -1,11 +1,13 @@
 import React from 'react'
 import ManageUserClient from './ManageUserClient'
-import { getUsers } from '@/lib/server_functions/users/queries'
+import { getRoles, getUsers } from '@/lib/server_functions/users/queries'
 
 export default async function AddUser() {
     const users = await getUsers();
+    const roles = await getRoles()
+    console.log(users);
 
     return (
-        <ManageUserClient users={users} />
+        <ManageUserClient roles={roles} users={users} />
     )
 }
