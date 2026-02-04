@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 import { Dialog, DialogContent, DialogContentType, DialogDescription, DialogHeader, DialogTitle } from '../ui/dialog'
+import { VisuallyHidden } from 'radix-ui'
 
 interface DialogComponentProps extends DialogContentType {
     title?: string,
@@ -12,14 +13,16 @@ interface DialogComponentProps extends DialogContentType {
 export default function DialogComponent({ title, description, children, open, onOpenChange, ...props }: DialogComponentProps) {
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent {...props}>
-                {
-                    (title || description) &&
-                    <DialogHeader>
-                        {title && <DialogTitle>{title}</DialogTitle>}
-                        {description && <DialogDescription>{description}</DialogDescription>}
-                    </DialogHeader>
-                }
+            <DialogContent className='text-black' {...props}>
+                {title ? (
+                    <DialogTitle>{title}</DialogTitle>
+                ) : (
+                    <DialogTitle className='hidden'>Dialog</DialogTitle>
+                )}
+
+                {description && (
+                    <DialogDescription>{description}</DialogDescription>
+                )}
                 {children}
             </DialogContent>
         </Dialog>
