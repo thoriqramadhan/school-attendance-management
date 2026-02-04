@@ -17,7 +17,7 @@ export default function Sidenav() {
             roles: ['ADMIN', 'USER']
         },
         {
-            route: 'manage-users/add',
+            route: 'manage-users',
             icon: <User />,
             roles: ['ADMIN']
         }
