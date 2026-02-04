@@ -8,7 +8,7 @@ export default function ProtectedLayout({ children }: ParentComponent) {
         <section className='w-full h-screen flex'>
             <SidebarProvider>
                 <Sidenav />
-                <div className="flex-1 flex flex-col">
+                <div className="flex-1 flex flex-col p-5">
                     <SidebarToggle />
                     {children}
                 </div>

@@ -12,7 +12,7 @@ export default function SidebarToggle({ }) {
     const segments = pathname.split('/').filter(segement => segement)
     const { isOpenObject } = useSidebar()
     return (
-        <span className='flex gap-x-2 h-fit items-center  p-5'>
+        <span className='flex gap-x-2 h-fit items-center'>
             <span onClick={() => isOpenObject.setIsOpen(prev => !prev)} className='cursor-pointer transition-300 hover:scale-110' >
                 {
                     React.cloneElement(

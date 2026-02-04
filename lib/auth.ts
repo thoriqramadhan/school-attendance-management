@@ -63,7 +63,7 @@ export async function login({ email, password }: { email: string, password: stri
         if (!isPasswordValid) return { success: false, message: 'Invalid credentials' }
 
         const token = jwt.sign({
-            sub: user.id, roleid: user.role
+            sub: user.id, roleid: user.role, name: user.name
         },
             process.env.JWT_SECRET!,
             { expiresIn: '1h' });
