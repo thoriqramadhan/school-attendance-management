@@ -1,8 +1,11 @@
 import React from 'react'
 import ManageUserClient from './ManageUserClient'
+import { getUsers } from '@/lib/server_functions/users/queries'
 
-export default function AddUser() {
+export default async function AddUser() {
+    const users = await getUsers();
+
     return (
-        <ManageUserClient />
+        <ManageUserClient users={users} />
     )
 }

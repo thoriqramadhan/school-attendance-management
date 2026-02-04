@@ -6,14 +6,20 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useState } from 'react'
 import AddUserDialog from './_components/AddUserDialog'
+import { User } from '@/types/users'
 
-export default function ManageUserClient() {
+interface ManageUserClientProps {
+    users: User[]
+}
+export default function ManageUserClient({ users }: ManageUserClientProps) {
     const [dialogState, setDialogState] = useState({
         add: false
     })
     function toggleDialogState(type: keyof typeof dialogState) {
         setDialogState(prev => ({ ...prev, [type]: !prev[type] }))
     }
+    console.log(users);
+
     return (
         <section className='space-y-5'>
             <Tabs>
@@ -38,17 +44,21 @@ export default function ManageUserClient() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            <TableRow>
-                                <TableCell>Jono</TableCell>
-                                <TableCell>Jono@gmail.com</TableCell>
-                                <TableCell>Teacher</TableCell>
-                                <TableCell></TableCell>
-                            </TableRow>
+                            {
+                                users?.map((item, i) => (
+                                    <TableRow key={i}>
+                                        <TableCell>{item?.username}</TableCell>
+                                        <TableCell>{item?.email}</TableCell>
+                                        <TableCell>{item?.role}</TableCell>
+                                        <TableCell></TableCell>
+                                    </TableRow>
+                                ))
+                            }
                         </TableBody>
                     </Table>
                 </CardContent>
             </Card>
             <AddUserDialog open={dialogState?.add} onOpenChange={() => toggleDialogState('add')} />
-        </section>
+        </section >
     )
 }
