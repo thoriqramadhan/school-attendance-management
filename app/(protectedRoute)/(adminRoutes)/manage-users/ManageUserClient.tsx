@@ -1,5 +1,4 @@
 'use client'
-import DialogComponent from '@/components/reusable_ui/Dialog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -67,7 +66,7 @@ export default function ManageUserClient({ users, roles }: ManageUserClientProps
                         <TableBody>
                             {
                                 users?.map((item, i) => (
-                                    <TableRow key={i}>
+                                    <TableRow className='text-center' key={i}>
                                         <TableCell>{item?.username}</TableCell>
                                         <TableCell>{item?.email}</TableCell>
                                         <TableCell>{item?.role}</TableCell>

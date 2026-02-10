@@ -29,7 +29,6 @@ export function middleware(request: NextRequest) {
         console.log(decoded);
 
         response.headers.set('x-user', JSON.stringify({ id: decoded.sub, role: decoded.role, name: decoded.name, email: decoded.email }))
-        console.log('success');
         return response
     } catch (error) {
         const response = NextResponse.redirect(new URL("/login", request.url))

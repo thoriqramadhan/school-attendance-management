@@ -29,3 +29,7 @@ export async function createUserAction({ payload }: { payload: Omit<User, 'role'
     }
 
 }
+
+export async function deleteUserAction(id: string) {
+
+}

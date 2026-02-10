@@ -1,8 +1,11 @@
+'use server'
 import bcrypt from 'bcryptjs'
 import pool from './db'
 import jwt from 'jsonwebtoken'
 import { DatabaseError } from 'pg';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { toast } from 'sonner';
 
 export async function register({ email, name, password }: { name: string, email: string, password: string }): Promise<GeneralResponse> {
     try {
@@ -86,4 +89,10 @@ export async function login({ email, password }: { email: string, password: stri
             message: error?.message
         }
     }
+}
+
+export async function logout() {
+    (await cookies()).delete(process.env.JWT_TOKEN_NAME!)
+    // toast.success('success signing out!')
+    redirect('/login')
 }
