@@ -53,7 +53,7 @@ export async function login({ email, password }: { email: string, password: stri
                 message: 'Payload cant be empty!'
             }
         }
-        const { rows } = await pool.query('SELECT id , password , roleid  FROM users WHERE email = $1', [email])
+        const { rows } = await pool.query('SELECT u.id , u.name , email ,password , rl.name as role  FROM users u left join roles rl on u.roleid=rl.id WHERE u.email = $1', [email])
         const user = rows[0]
 
         if (!user) {
@@ -61,14 +61,14 @@ export async function login({ email, password }: { email: string, password: stri
         }
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) return { success: false, message: 'Invalid credentials' }
+        console.log('Login : ', user);
 
         const token = jwt.sign({
-            sub: user.id, roleid: user.role, name: user.name
+            sub: user.id, role: user.role, name: user.name
+            , email: user.email
         },
             process.env.JWT_SECRET!,
             { expiresIn: '1h' });
-        console.log(user);
-        console.log(token);
 
         (await cookies()).set('access_token', token, {
             httpOnly: true,

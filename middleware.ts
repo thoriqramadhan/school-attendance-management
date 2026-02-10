@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
 import { UUID } from "crypto"
+import { ExistingRole } from "./types/users"
 
 export const runtime = "nodejs"
 
@@ -22,11 +23,12 @@ export function middleware(request: NextRequest) {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { sub: UUID, roleid: number, name: string }
+        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { sub: UUID, role: ExistingRole, name: string, email: string }
 
         const response = isPublic ? NextResponse.redirect(new URL('/', request.url)) : NextResponse.next()
+        console.log(decoded);
 
-        response.headers.set('x-user', JSON.stringify({ id: decoded.sub, roleId: decoded.roleid, name: decoded.name }))
+        response.headers.set('x-user', JSON.stringify({ id: decoded.sub, role: decoded.role, name: decoded.name, email: decoded.email }))
         console.log('success');
         return response
     } catch (error) {

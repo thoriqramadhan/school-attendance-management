@@ -1,10 +1,10 @@
 export type User = {
     username: string,
     email: string,
-    role: 'teacher' | 'student' | 'admin',
+    role: ExistingRole,
     roleId: number
 }
-
+export type ExistingRole = 'teacher' | 'student' | 'admin'
 export type Role = {
     id: number,
     name: string
