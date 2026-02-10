@@ -8,7 +8,7 @@ import AddUserDialog, { AddUserSubmitCallback } from './_components/AddUserDialo
 import { Role, User } from '@/types/users'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Ellipsis } from 'lucide-react'
-import { createUserAction } from '@/lib/server_functions/users/action'
+import { createUserAction, deleteUserAction } from '@/lib/server_functions/users/action'
 import { errorBuilder } from '@/utils/builder'
 import { toast } from 'sonner'
 
@@ -67,7 +67,7 @@ export default function ManageUserClient({ users, roles }: ManageUserClientProps
                             {
                                 users?.map((item, i) => (
                                     <TableRow className='text-center' key={i}>
-                                        <TableCell>{item?.username}</TableCell>
+                                        <TableCell>{item?.name}</TableCell>
                                         <TableCell>{item?.email}</TableCell>
                                         <TableCell>{item?.role}</TableCell>
                                         <TableCell className='flex justify-center items-center'>
@@ -79,7 +79,7 @@ export default function ManageUserClient({ users, roles }: ManageUserClientProps
                                                     <DropdownMenuItem>
                                                         Edit
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={async () => await deleteUserAction(item?.id)}>
                                                         Delete
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>

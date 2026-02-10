@@ -3,9 +3,10 @@ import bcrypt from 'bcryptjs'
 import pool from './db'
 import jwt from 'jsonwebtoken'
 import { DatabaseError } from 'pg';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { toast } from 'sonner';
+import { UserJwt } from '@/types/server_functions/auth';
 
 export async function register({ email, name, password }: { name: string, email: string, password: string }): Promise<GeneralResponse> {
     try {
@@ -95,4 +96,13 @@ export async function logout() {
     (await cookies()).delete(process.env.JWT_TOKEN_NAME!)
     // toast.success('success signing out!')
     redirect('/login')
+}
+
+export async function getLoggedUserDetail(): Promise<UserJwt | null> {
+    const headerList = headers()
+    const user = (await headerList).get('x-user')
+    if (user) {
+        return JSON.parse(user) as UserJwt
+    }
+    return null
 }
