@@ -1,8 +1,10 @@
+import { getAllClass } from "@/lib/server_functions/manage-class/queries";
 import ManageClassClient from "./ManageClassClient";
 
 
-export default function ManageClass() {
+export default async function ManageClass() {
+    const classDatas = await getAllClass()
     return (
-        <ManageClassClient />
+        <ManageClassClient classDatas={classDatas} />
     )
 }

@@ -6,3 +6,8 @@ export async function revalidateUserRelated() {
     revalidateTag('users', 'max')
     revalidatePath('/manage-users')
 }
+
+export async function revalidateClassRelated() {
+    revalidateTag('class', 'max')
+    revalidatePath('/manage-class')
+}
