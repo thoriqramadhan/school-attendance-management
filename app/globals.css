@@ -123,6 +123,10 @@
   a {
     @apply text-xs italic text-blue-500
   }
+
+  h1 , h2 , h3 , h4 , h5 {
+    @apply font-semibold
+  }
 }
 
 @layer components {

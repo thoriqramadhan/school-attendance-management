@@ -14,3 +14,4 @@ export const getAllClass = unstable_cache(async () => {
     revalidate: 120,
     tags: ['class']
 })
+
