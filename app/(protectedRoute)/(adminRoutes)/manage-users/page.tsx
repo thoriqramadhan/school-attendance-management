@@ -1,7 +1,6 @@
 import React from 'react'
 import ManageUserClient from './ManageUserClient'
 import { getRoles, getUsers } from '@/lib/server_functions/users/queries'
-import { headers } from 'next/headers';
 import { getLoggedUserDetail } from '@/lib/auth';
 
 export default async function AddUser() {

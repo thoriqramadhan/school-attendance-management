@@ -2,6 +2,7 @@
 
 import pool from "@/lib/db"
 import { Class } from "@/types/server_functions/manage-class";
+import { ClassMemberView } from "@/types/users";
 import { unstable_cache } from "next/cache"
 
 
@@ -15,3 +16,11 @@ export const getAllClass = unstable_cache(async () => {
     tags: ['class']
 })
 
+
+export const getAllUsersClass = async (id: string | number) => {
+    const cachedFn = unstable_cache(async () => {
+        const res = await pool.query('select * from class_members_view where class_id = $1', [id])
+        return res?.rows as ClassMemberView[]
+    }, [`class-users-${id}`], { tags: [`class-users-${id}`] })
+    return cachedFn()
+}

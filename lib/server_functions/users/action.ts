@@ -4,7 +4,7 @@ import { User } from "@/types/users";
 import { revalidateUserRelated } from "@/utils/revalidate";
 import { hash } from "bcryptjs";
 
-export async function createUserAction({ payload }: { payload: Omit<User, 'role'> & { password: string } }): Promise<GeneralResponse> {
+export async function createUserAction({ payload }: { payload: Omit<Omit<User, 'role'>, 'id'> & { password: string } }): Promise<GeneralResponse> {
     try {
         if (!payload.email || !payload.password || !payload.name || !payload.roleId) {
             return {

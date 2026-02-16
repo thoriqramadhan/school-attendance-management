@@ -31,7 +31,7 @@ export default function ManageUserClient({ users, roles }: ManageUserClientProps
     }
     async function addUserCallback({ data, form }: AddUserSubmitCallback) {
         try {
-            const res = await createUserAction({ payload: { username: data?.name, email: data?.email, password: data?.password, roleId: data?.role } })
+            const res = await createUserAction({ payload: { name: data?.name, email: data?.email, password: data?.password, roleId: data?.role } })
             if (!res.success) throw errorBuilder('Failed to create user', res.message!);
             toast.success('Success creating user')
             toggleDialogState('add')
