@@ -19,7 +19,7 @@ export default async function ClassDetail({
                         </CardTitle>
                         <Button className='w-full flex-wrap'>
                             <Plus />
-                            Add User
+                            Link User
                         </Button>
                     </CardHeader>
                     <hr className='w-full' />

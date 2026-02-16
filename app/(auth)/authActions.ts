@@ -50,7 +50,7 @@ export async function loginAction(data: unknown): Promise<GeneralResponse> {
     } catch (error) {
         return {
             success: false,
-            message: error?.message
+            message: (error as Error)?.message
         }
     }
 }
