@@ -38,7 +38,7 @@ export default function Sidenav() {
                 sidebarItem.map((item, i) => (
                     <Tooltip key={i}>
                         <TooltipTrigger className='cursor-pointer' asChild>
-                            <Link href={`/${item.route}`} key={i} className={cn(!isOpenObject?.isOpen && 'hidden')}>
+                            <Link href={`/${item.route}`} key={i} className={cn(!isOpenObject?.isOpen && 'hidden')} prefetch={true}>
                                 {React.cloneElement(item.icon, { color: pathname.includes(item.route) ? 'blue' : 'black' })}
                             </Link>
                         </TooltipTrigger>
