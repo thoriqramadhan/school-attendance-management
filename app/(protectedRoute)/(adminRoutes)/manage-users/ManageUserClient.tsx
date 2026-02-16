@@ -1,10 +1,16 @@
 'use client'
+import dynamic from 'next/dynamic'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useState } from 'react'
-import AddUserDialog, { AddUserSubmitCallback } from './_components/AddUserDialog'
+import { AddUserSubmitCallback } from './_components/AddUserDialog'
+
+const AddUserDialog = dynamic(() => import('./_components/AddUserDialog'), {
+    loading: () => null,
+    ssr: false
+})
 import { Role, User } from '@/types/users'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Ellipsis } from 'lucide-react'
@@ -92,7 +98,10 @@ export default function ManageUserClient({ users, roles }: ManageUserClientProps
                     </Table>
                 </CardContent>
             </Card>
-            <AddUserDialog roles={roles} open={dialogState?.add} submitCallback={addUserCallback} onOpenChange={() => toggleDialogState('add')} />
+            {
+                dialogState?.add &&
+                <AddUserDialog roles={roles} open={dialogState?.add} submitCallback={addUserCallback} onOpenChange={() => toggleDialogState('add')} />
+            }
         </section >
     )
 }

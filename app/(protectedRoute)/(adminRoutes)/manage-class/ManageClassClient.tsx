@@ -3,7 +3,11 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { BookUser, Plus } from 'lucide-react'
 import { useState } from 'react'
-import AddClasssDialog, { AddClasssSchemaObject, AddClasssSubmitCallback } from './_components/AddClassDialog'
+import { AddClasssSchemaObject, AddClasssSubmitCallback } from './_components/AddClassDialog'
+const AddClasssDialog = dynamic(import('./_components/AddClassDialog'), {
+    loading: () => null,
+    ssr: false
+})
 import { toggleModalState } from '@/utils/stateSetter'
 import { errorBuilder } from '@/utils/builder'
 import { toast } from 'sonner'
@@ -11,6 +15,7 @@ import { createClassAction } from '@/lib/server_functions/manage-class/action'
 import { Class } from '@/types/server_functions/manage-class'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 
 interface ManageClassClientProps {
     classDatas: Class[]
@@ -72,7 +77,11 @@ export default function ManageClassClient({ classDatas }: ManageClassClientProps
                     </section>
                 </CardContent>
             </Card>
-            <AddClasssDialog submitCallback={handleSubmit} onOpenChange={() => toggleModalState(setModalState, 'addClass')} open={modalState?.addClass} />
+            {
+                modalState?.addClass &&
+
+                <AddClasssDialog submitCallback={handleSubmit} onOpenChange={() => toggleModalState(setModalState, 'addClass')} open={modalState?.addClass} />
+            }
         </>
     )
 }
