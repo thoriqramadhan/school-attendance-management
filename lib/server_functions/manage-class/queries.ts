@@ -2,7 +2,7 @@
 
 import pool from "@/lib/db"
 import { Class } from "@/types/server_functions/manage-class";
-import { ClassMemberView } from "@/types/users";
+import { ClassMemberView, User } from "@/types/users";
 import { unstable_cache } from "next/cache"
 
 
@@ -24,3 +24,8 @@ export const getAllUsersClass = async (id: string | number) => {
     }, [`class-users-${id}`], { tags: [`class-users-${id}`] })
     return cachedFn()
 }
+
+export const getNonLinkedUsers = unstable_cache(async () => {
+    const res = await pool.query('select * from non_linked_users');
+    return res?.rows as User[]
+}, ['unlinked-users'], { tags: ['unlinked-users'] })

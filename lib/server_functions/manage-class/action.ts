@@ -1,7 +1,7 @@
 "use server"
 
 import pool from "@/lib/db"
-import { revalidateClassRelated } from "@/utils/revalidate";
+import { revalidateClassMembersRelated, revalidateClassRelated } from "@/utils/revalidate";
 import { cleanString } from "@/utils/textFormat";
 
 type classId = number | string
@@ -53,6 +53,7 @@ interface linkUserToClassActionProps {
 export async function linkUserToClassAction({ classId, userId }: linkUserToClassActionProps): Promise<GeneralResponse> {
     try {
         await pool.query('INSERT INTO class_members(classid , userid) values ($1 , $2)', [classId, userId])
+        revalidateClassMembersRelated(classId)
         return { success: true }
     } catch (error) {
         return {

@@ -25,6 +25,8 @@ export default function LinkUserDialog({
     description,
     ...props
 }: LinkUserDialogProps) {
+    console.log(users);
+
     const [selectedUserId, setSelectedUserId] = React.useState<string>('')
 
     function handleSubmit() {
@@ -41,13 +43,13 @@ export default function LinkUserDialog({
                     {description && <DialogDescription>{description}</DialogDescription>}
                 </DialogHeader>
                 <Select value={selectedUserId} onValueChange={setSelectedUserId}>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full cursor-pointer">
                         <SelectValue placeholder="Select user" />
                     </SelectTrigger>
                     <SelectContent>
                         {users?.map((user) => (
                             <SelectItem key={user.id} value={String(user.id)}>
-                                {user.name}
+                                {user.email} - <b>{user.name}</b> - {user?.role}
                             </SelectItem>
                         ))}
                     </SelectContent>
