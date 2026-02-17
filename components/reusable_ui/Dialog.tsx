@@ -15,7 +15,7 @@ export default function DialogComponent({ title, description, children, open, on
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className='text-black' {...props}>
                 {title ? (
-                    <DialogTitle>{title}</DialogTitle>
+                    <DialogTitle className='text-black'>{title}</DialogTitle>
                 ) : (
                     <DialogTitle className='hidden'>Dialog</DialogTitle>
                 )}

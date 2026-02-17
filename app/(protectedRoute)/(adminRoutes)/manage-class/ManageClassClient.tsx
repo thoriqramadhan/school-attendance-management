@@ -2,9 +2,9 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { BookUser, Pencil, Plus, Settings, Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AddClasssSchemaObject, AddClasssSubmitCallback } from './_components/AddClassDialog'
-const AddClasssDialog = dynamic(import('./_components/AddClassDialog'), {
+const AddClasssDialog = dynamic(() => import('./_components/AddClassDialog'), {
     loading: () => null,
     ssr: false
 })
@@ -17,7 +17,10 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import ConfirmationModal from '@/app/components/ConfirmationModal'
+const ConfirmationModal = dynamic(() => import('@/app/components/ConfirmationModal'), {
+    loading: () => null,
+    ssr: false
+})
 
 interface ManageClassClientProps {
     classDatas: Class[]
@@ -111,15 +114,8 @@ export default function ManageClassClient({ classDatas }: ManageClassClientProps
                     </section>
                 </CardContent>
             </Card>
-            {
-                modalState?.deleteClass &&
-                <ConfirmationModal open={modalState?.deleteClass} title='Delete Class' onOpenChange={() => toggleModalState(setModalState, 'deleteClass')} onConfirm={handleDeleteClass} />
-            }
-            {
-                modalState?.addClass &&
-
-                <AddClasssDialog submitCallback={handleSubmit} onOpenChange={() => toggleModalState(setModalState, 'addClass')} open={modalState?.addClass} />
-            }
+            {modalState?.deleteClass && <ConfirmationModal open={modalState?.deleteClass} title='Delete Class' onOpenChange={() => toggleModalState(setModalState, 'deleteClass')} onConfirm={handleDeleteClass} />}
+            {modalState?.addClass && <AddClasssDialog submitCallback={handleSubmit} onOpenChange={() => toggleModalState(setModalState, 'addClass')} open={modalState?.addClass} />}
         </>
     )
 }

@@ -1,7 +1,8 @@
 'use client'
 
 import React from 'react'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import DialogComponent from '@/components/reusable_ui/Dialog'
+import { DialogFooter } from '@/components/ui/dialog'
 import { Button, ButtonVariant } from '@/components/ui/button'
 import { VariantProps } from 'class-variance-authority'
 
@@ -27,27 +28,21 @@ export default function ConfirmationModal({
     variant,
 }: ConfirmationModalProps) {
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent showCloseButton={false} className="text-black sm:max-w-md">
-                <DialogHeader>
-                    <DialogTitle>{title}</DialogTitle>
-                    {description && <DialogDescription>{description}</DialogDescription>}
-                </DialogHeader>
-                <DialogFooter>
-                    <Button variant="outline" onClick={() => onOpenChange(false)}>
-                        {cancelText}
-                    </Button>
-                    <Button
-                        variant={variant}
-                        onClick={() => {
-                            onConfirm()
-                            onOpenChange(false)
-                        }}
-                    >
-                        {confirmText}
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+        <DialogComponent open={open} onOpenChange={onOpenChange} title={title} description={description} showCloseButton={false} className="sm:max-w-md">
+            <DialogFooter>
+                <Button variant="outline" onClick={() => onOpenChange(false)}>
+                    {cancelText}
+                </Button>
+                <Button
+                    variant={variant}
+                    onClick={() => {
+                        onConfirm()
+                        onOpenChange(false)
+                    }}
+                >
+                    {confirmText}
+                </Button>
+            </DialogFooter>
+        </DialogComponent>
     )
 }

@@ -27,6 +27,8 @@ export default function AddClasssDialog({ onOpenChange, open, submitCallback }: 
     const form = useForm<z.infer<typeof AddClasssSchema>>({
         resolver: zodResolver(AddClasssSchema),
     })
+    console.log('DIALOG' + open);
+
     return (
         <DialogComponent title='Add Class' open={open} onOpenChange={onOpenChange} >
             <Form {...form}>

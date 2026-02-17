@@ -1,6 +1,10 @@
 'use client'
 import EmptyDataFallback from '@/app/components/fallback/EmptyDataComp'
-import LinkUserDialog from '@/app/components/LinkUserDialog'
+import dynamic from 'next/dynamic'
+const LinkUserDialog = dynamic(() => import('@/app/components/LinkUserDialog'), {
+    loading: () => null,
+    ssr: false
+})
 import { AvatarImage, AvatarFallback, Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -25,6 +29,7 @@ export default function ManageClassDetailClient({ classMembers, nonLinkedUsers, 
         try {
             const res = await linkUserToClassAction({ userId: selectedUserId, classId })
             if (!res.success) throw errorBuilder('Failed to link user', res?.message!);
+            toast.success('Success linking users')
         } catch (error) {
             toast.error((error as Error).message)
         } finally {
@@ -70,10 +75,7 @@ export default function ManageClassDetailClient({ classMembers, nonLinkedUsers, 
 
                 </CardContent>
             </Card>
-            {
-                modalState?.linkUser &&
-                <LinkUserDialog users={nonLinkedUsers} onSubmit={handleLinkUser} open={modalState?.linkUser} onOpenChange={() => toggleModalState(setModalState, 'linkUser')} />
-            }
+            {modalState?.linkUser && <LinkUserDialog users={nonLinkedUsers} onSubmit={handleLinkUser} open={modalState?.linkUser} onOpenChange={() => toggleModalState(setModalState, 'linkUser')} />}
         </>
     )
 }
