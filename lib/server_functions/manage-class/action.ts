@@ -47,11 +47,13 @@ export async function editClassAction({ classId, name }: { classId: classId, nam
     }
 }
 
-interface linkUserToClassActionProps {
+
+
+interface linkUserSegmentActionProps {
     userId: number | string,
     classId: number | string
 }
-export async function linkUserToClassAction({ classId, userId }: linkUserToClassActionProps): Promise<GeneralResponse> {
+export async function linkUserToClassAction({ classId, userId }: linkUserSegmentActionProps): Promise<GeneralResponse> {
     try {
         await pool.query('INSERT INTO class_members(classid , userid) values ($1 , $2)', [classId, userId])
         revalidateClassMembersRelated(classId)
@@ -61,6 +63,37 @@ export async function linkUserToClassAction({ classId, userId }: linkUserToClass
             success: false,
             message: (error as Error)?.message
         }
+    }
+}
+export async function unlinkUserToClassAction({ classId, userId }: linkUserSegmentActionProps): Promise<GeneralResponse> {
+    try {
+        await pool.query('DELETE FROM class_members where classid=$1 AND userid=$2', [classId, userId])
+        revalidateClassMembersRelated(classId)
+        return { success: true }
+    } catch (error) {
+        return {
+            success: false,
+            message: (error as Error)?.message
+        }
+    }
+}
+export async function transferUserToClassAction({ classId, userId, newClassId }: linkUserSegmentActionProps & { newClassId: number | string }): Promise<GeneralResponse> {
+    const client = await pool.connect()
+    try {
+        await client.query('BEGIN')
+        await client.query('DELETE FROM class_members where classid=$1 AND userid=$2', [classId, userId])
+        await client.query('INSERT INTO class_members (classid, userid) VALUES ($1, $2)', [newClassId, userId])
+        await client.query('COMMIT')
+        revalidateClassMembersRelated(classId)
+        return { success: true }
+    } catch (error) {
+        await client.query('ROLLBACK')
+        return {
+            success: false,
+            message: (error as Error)?.message
+        }
+    } finally {
+        client.release()
     }
 }
 
