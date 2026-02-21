@@ -9,10 +9,14 @@ const UnlinkUserDialog = dynamic(() => import('@/app/(protectedRoute)/(adminRout
     loading: () => null,
     ssr: false
 })
+const MoveClassDialog = dynamic(() => import('@/app/(protectedRoute)/(adminRoutes)/manage-class/_components/MoveClassDialog'), {
+    loading: () => null,
+    ssr: false
+})
 import { AvatarImage, AvatarFallback, Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { linkUserToClassAction, unlinkUserToClassAction } from '@/lib/server_functions/manage-class/action'
+import { linkUserToClassAction, unlinkUserToClassAction, transferUserToClassAction } from '@/lib/server_functions/manage-class/action'
 import { ClassMemberView, User } from '@/types/users'
 import { errorBuilder } from '@/utils/builder'
 import { toggleModalState } from '@/utils/stateSetter'
@@ -28,10 +32,11 @@ interface ManageClassDetailClientProps {
     classId: string,
     classes: Class[]
 }
-export default function ManageClassDetailClient({ classMembers, nonLinkedUsers, classId }: ManageClassDetailClientProps) {
+export default function ManageClassDetailClient({ classMembers, nonLinkedUsers, classId, classes }: ManageClassDetailClientProps) {
     const [modalState, setModalState] = useState({
         linkUser: false,
         unlinkUser: false,
+        moveClass: false,
     })
     const [selectedMember, setSelectedMember] = useState<ClassMemberView | null>(null)
 
@@ -55,6 +60,19 @@ export default function ManageClassDetailClient({ classMembers, nonLinkedUsers, 
             toast.success('Success unlinking user')
         } catch (error) {
             toast.error((error as Error).message)
+        }
+    }
+
+    async function handleMoveClass(newClassId: string) {
+        if (!selectedMember) return
+        try {
+            const res = await transferUserToClassAction({ userId: selectedMember.user_id, classId, newClassId })
+            if (!res.success) throw errorBuilder('Failed to move user', res?.message!);
+            toast.success('Success moving user')
+        } catch (error) {
+            toast.error((error as Error).message)
+        } finally {
+            toggleModalState(setModalState, 'moveClass')
         }
     }
     return (
@@ -96,7 +114,7 @@ export default function ManageClassDetailClient({ classMembers, nonLinkedUsers, 
                                                     <Unlink />
                                                     Unlink User
                                                 </DropdownMenuItem>
-                                                <DropdownMenuItem variant='destructive'>
+                                                <DropdownMenuItem variant='destructive' onClick={() => { setSelectedMember(item); toggleModalState(setModalState, 'moveClass') }}>
                                                     <Move />
                                                     Move Class
                                                 </DropdownMenuItem>
@@ -113,6 +131,7 @@ export default function ManageClassDetailClient({ classMembers, nonLinkedUsers, 
             {modalState?.linkUser && <LinkUserDialog users={nonLinkedUsers} onSubmit={handleLinkUser} open={modalState?.linkUser} onOpenChange={() => toggleModalState(setModalState, 'linkUser')} />}
 
             {modalState?.unlinkUser && selectedMember && <UnlinkUserDialog open={modalState?.unlinkUser} onOpenChange={() => toggleModalState(setModalState, 'unlinkUser')} selectedMember={selectedMember} onConfirm={handleUnlinkUser} />}
+            {modalState?.moveClass && selectedMember && <MoveClassDialog open={modalState?.moveClass} onOpenChange={() => toggleModalState(setModalState, 'moveClass')} classes={classes} currentClassId={classId} onSubmit={handleMoveClass} />}
         </>
     )
 }

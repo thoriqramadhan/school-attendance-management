@@ -85,6 +85,7 @@ export async function transferUserToClassAction({ classId, userId, newClassId }:
         await client.query('INSERT INTO class_members (classid, userid) VALUES ($1, $2)', [newClassId, userId])
         await client.query('COMMIT')
         revalidateClassMembersRelated(classId)
+        revalidateClassMembersRelated(newClassId)
         return { success: true }
     } catch (error) {
         await client.query('ROLLBACK')
