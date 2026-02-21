@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Role } from '@/types/users'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { FormEvent, FormEventHandler } from 'react'
 import { useForm, UseFormReturn } from 'react-hook-form'
 import z from 'zod'
 

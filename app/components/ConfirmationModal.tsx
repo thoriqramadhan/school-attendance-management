@@ -15,6 +15,7 @@ interface ConfirmationModalProps {
     confirmText?: string
     cancelText?: string
     variant?: VariantProps<ButtonVariant>['variant']
+    children?: React.ReactNode
 }
 
 export default function ConfirmationModal({
@@ -26,6 +27,7 @@ export default function ConfirmationModal({
     confirmText = 'Confirm',
     cancelText = 'Cancel',
     variant,
+    children
 }: ConfirmationModalProps) {
     return (
         <DialogComponent open={open} onOpenChange={onOpenChange} title={title} description={description} showCloseButton={false} className="sm:max-w-md">
@@ -43,6 +45,7 @@ export default function ConfirmationModal({
                     {confirmText}
                 </Button>
             </DialogFooter>
+            {children}
         </DialogComponent>
     )
 }

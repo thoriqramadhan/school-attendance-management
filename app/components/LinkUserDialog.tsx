@@ -38,12 +38,12 @@ export default function LinkUserDialog({
     return (
         <DialogComponent open={open} onOpenChange={onOpenChange} title={title} description={description} className="sm:max-w-md">
             <Select value={selectedUserId} onValueChange={setSelectedUserId}>
-                <SelectTrigger className="w-full cursor-pointer">
+                <SelectTrigger className="w-full text-black cursor-pointer">
                     <SelectValue placeholder="Select user" />
                 </SelectTrigger>
                 <SelectContent>
                     {users?.map((user) => (
-                        <SelectItem key={user.id} value={String(user.id)}>
+                        <SelectItem className='text-black' key={user.id} value={String(user.id)}>
                             {user.email} - <b>{user.name}</b> - {user?.role}
                         </SelectItem>
                     ))}

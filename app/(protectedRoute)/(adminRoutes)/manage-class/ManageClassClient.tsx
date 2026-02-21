@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { BookUser, Pencil, Plus, Settings, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { AddClasssSchemaObject, AddClasssSubmitCallback } from './_components/AddClassDialog'
+import { AddClasssSubmitCallback } from './_components/AddClassDialog'
+import dynamic from 'next/dynamic'
 const AddClasssDialog = dynamic(() => import('./_components/AddClassDialog'), {
     loading: () => null,
     ssr: false
@@ -15,8 +16,8 @@ import { createClassAction, deleteClassAction } from '@/lib/server_functions/man
 import { Class } from '@/types/server_functions/manage-class'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+const EditClassDialog = dynamic(() => import('./_components/EditClassDialog'), { loading: () => null, ssr: false })
 const ConfirmationModal = dynamic(() => import('@/app/components/ConfirmationModal'), {
     loading: () => null,
     ssr: false
@@ -31,7 +32,7 @@ export default function ManageClassClient({ classDatas }: ManageClassClientProps
         editClass: false,
         deleteClass: false
     })
-    const [selectedClass, setSelectedClass] = useState<number | null>(null)
+    const [selectedClass, setSelectedClass] = useState<Class | null>(null)
     async function handleSubmit({ data, form }: AddClasssSubmitCallback) {
         try {
             if (!data?.name) throw errorBuilder('Failed to create class', 'name is required');
@@ -49,18 +50,21 @@ export default function ManageClassClient({ classDatas }: ManageClassClientProps
             toggleModalState(setModalState, 'addClass')
         }
     }
-    function toggleDeleteConfirmation(classId: number, event: React.MouseEvent<HTMLDivElement>) {
+    function toggleDeleteConfirmation(classItem: Class, event: React.MouseEvent<HTMLDivElement>) {
         event.stopPropagation()
-        setSelectedClass(classId)
+        setSelectedClass(classItem)
         toggleModalState(setModalState, 'deleteClass')
-
+    }
+    function toggleEditConfirmation(classItem: Class) {
+        setSelectedClass(classItem)
+        toggleModalState(setModalState, 'editClass')
     }
     async function handleDeleteClass() {
         try {
             if (!selectedClass) return
-            const res = await deleteClassAction({ classId: selectedClass })
+            const res = await deleteClassAction({ classId: selectedClass.id })
             if (!res?.success) throw errorBuilder('Failed deleting class', res.message!);
-            toast.success('Success delete class ' + selectedClass)
+            toast.success('Success delete class ' + selectedClass.name)
         } catch (error) {
             toast.error((error as Error).message)
         }
@@ -89,14 +93,14 @@ export default function ManageClassClient({ classDatas }: ManageClassClientProps
                                                     <DropdownMenuTrigger asChild className='absolute top-5 right-5' onClick={(e) => e.stopPropagation()}>
                                                         <Settings size={20} />
                                                     </DropdownMenuTrigger>
-                                                    <DropdownMenuContent side='left' onClick={(e) => toggleDeleteConfirmation(item?.id, e)}>
+                                                    <DropdownMenuContent side='left' >
                                                         <>User Linked : {item?.student_count}</>
                                                         <DropdownMenuSeparator />
-                                                        <DropdownMenuItem >
+                                                        <DropdownMenuItem onClick={() => toggleEditConfirmation(item)}>
                                                             <Pencil />
                                                             <p>Edit</p>
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem variant='destructive' onClick={(e) => toggleDeleteConfirmation(item?.id, e)}>
+                                                        <DropdownMenuItem variant='destructive' onClick={(e) => toggleDeleteConfirmation(item, e)}>
                                                             <Trash2 />
                                                             <p>Delete</p>
                                                         </DropdownMenuItem>
@@ -114,6 +118,7 @@ export default function ManageClassClient({ classDatas }: ManageClassClientProps
                     </section>
                 </CardContent>
             </Card>
+            {modalState?.editClass && <EditClassDialog open={modalState?.editClass} onOpenChange={() => toggleModalState(setModalState, 'editClass')} selectedClass={selectedClass!} submitCallback={() => {}} />}
             {modalState?.deleteClass && <ConfirmationModal open={modalState?.deleteClass} title='Delete Class' onOpenChange={() => toggleModalState(setModalState, 'deleteClass')} onConfirm={handleDeleteClass} />}
             {modalState?.addClass && <AddClasssDialog submitCallback={handleSubmit} onOpenChange={() => toggleModalState(setModalState, 'addClass')} open={modalState?.addClass} />}
         </>
