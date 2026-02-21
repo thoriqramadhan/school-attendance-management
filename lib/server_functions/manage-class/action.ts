@@ -35,7 +35,8 @@ export async function deleteClassAction({ classId }: { classId: classId }): Prom
 export async function editClassAction({ classId, name }: { classId: classId, name?: string }): Promise<GeneralResponse> {
     try {
         if (!name) return { success: false, message: 'Name cant be empty!' }
-        await pool.query('UPDATE FROM class set name = COALESCE($2 , name) where id = $1', [classId, name])
+        const filteredName = cleanString(name)
+        await pool.query('UPDATE class set name = COALESCE($2 , name) where id = $1', [classId, filteredName])
         revalidateClassRelated()
         return { success: true }
     } catch (error) {

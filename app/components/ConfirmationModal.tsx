@@ -31,6 +31,7 @@ export default function ConfirmationModal({
 }: ConfirmationModalProps) {
     return (
         <DialogComponent open={open} onOpenChange={onOpenChange} title={title} description={description} showCloseButton={false} className="sm:max-w-md">
+            {children}
             <DialogFooter>
                 <Button variant="outline" onClick={() => onOpenChange(false)}>
                     {cancelText}
@@ -45,7 +46,6 @@ export default function ConfirmationModal({
                     {confirmText}
                 </Button>
             </DialogFooter>
-            {children}
         </DialogComponent>
     )
 }

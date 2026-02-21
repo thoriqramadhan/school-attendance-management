@@ -14,15 +14,18 @@ export default function DialogComponent({ title, description, children, open, on
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className='text-black' {...props}>
-                {title ? (
-                    <DialogTitle className='text-black'>{title}</DialogTitle>
-                ) : (
-                    <DialogTitle className='hidden'>Dialog</DialogTitle>
-                )}
+                <DialogHeader>
 
-                {description && (
-                    <DialogDescription>{description}</DialogDescription>
-                )}
+                    {title ? (
+                        <DialogTitle className='text-black'>{title}</DialogTitle>
+                    ) : (
+                        <DialogTitle className='hidden'>Dialog</DialogTitle>
+                    )}
+
+                    {description && (
+                        <DialogDescription >{description}</DialogDescription>
+                    )}
+                </DialogHeader>
                 {children}
             </DialogContent>
         </Dialog>

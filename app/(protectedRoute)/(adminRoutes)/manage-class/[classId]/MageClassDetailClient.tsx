@@ -12,7 +12,7 @@ import { linkUserToClassAction } from '@/lib/server_functions/manage-class/actio
 import { ClassMemberView, User } from '@/types/users'
 import { errorBuilder } from '@/utils/builder'
 import { toggleModalState } from '@/utils/stateSetter'
-import { Plus, Settings } from 'lucide-react'
+import { Ellipsis, Plus, Settings } from 'lucide-react'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 
@@ -65,8 +65,8 @@ export default function ManageClassDetailClient({ classMembers, nonLinkedUsers, 
                                             <p>{item?.role}</p>
                                         </div>
                                     </CardContent>
-                                    <span className='absolute top-5 right-5'>
-                                        <Settings />
+                                    <span className='absolute cursor-pointer top-5 right-5'>
+                                        <Ellipsis />
                                     </span>
                                 </Card>
                             )) : <EmptyDataFallback />

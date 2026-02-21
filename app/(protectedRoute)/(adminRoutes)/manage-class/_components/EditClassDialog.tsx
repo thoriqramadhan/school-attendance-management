@@ -8,7 +8,7 @@ import { Class } from '@/types/server_functions/manage-class'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, UseFormReturn } from 'react-hook-form'
 import z from 'zod'
-import React from 'react'
+import { useEffect } from 'react'
 import ConfirmationModal from '@/app/components/ConfirmationModal'
 
 const EditClassSchema = z.object({
@@ -33,18 +33,23 @@ export default function EditClassDialog({ open, onOpenChange, selectedClass, sub
         }
     })
 
+    useEffect(() => {
+        form.reset({ name: selectedClass?.name ?? '' })
+    }, [selectedClass])
+
+    const handleConfirm = form.handleSubmit(val => submitCallback({ data: val, form }))
+
     return (
-        <ConfirmationModal onConfirm={() => { }} title='Edit Class' open={open} onOpenChange={onOpenChange}>
+        <ConfirmationModal onConfirm={handleConfirm} title='Edit Class' description='use underscore (_) to space' open={open} onOpenChange={onOpenChange}>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(val => submitCallback({ data: val, form }))} className='space-y-5'>
+                <form onSubmit={(e) => e.preventDefault()} className='space-y-5'>
                     <FormField control={form.control} name='name' render={({ field }) => (
                         <FormItem>
                             <FormLabel>Class Name</FormLabel>
-                            <Input type='text' required {...field} />
+                            <Input type='text' placeholder='Class name..' required {...field} />
                             <FormMessage />
                         </FormItem>
                     )} />
-                    <Button className='w-full'>Save</Button>
                 </form>
             </Form>
         </ConfirmationModal>
