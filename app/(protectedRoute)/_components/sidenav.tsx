@@ -2,30 +2,41 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useSidebar } from '@/lib/context/sidebarContext'
 import { cn } from '@/lib/utils'
-import { GraduationCap, Home, Sidebar, SidebarClose, User, X } from 'lucide-react'
+import { ExistingRole } from '@/types/users'
+import { Book, GraduationCap, Home, Sidebar, SidebarClose, User, X } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useState } from 'react'
 
+type SidebarStuct = {
+    route: string,
+    icon?: React.ReactElement,
+    roles: ExistingRole[]
+}
 export default function Sidenav() {
     const { isOpenObject } = useSidebar()
     const pathname = usePathname()
 
-    const sidebarItem = [
+    const sidebarItem: SidebarStuct[] = [
         {
             route: 'dashboard',
             icon: <Home />,
-            roles: ['ADMIN', 'USER']
+            roles: ['admin', 'student']
         },
         {
             route: 'manage-users',
             icon: <User />,
-            roles: ['ADMIN']
+            roles: ['admin']
         },
         {
             route: 'manage-class',
             icon: <GraduationCap />,
-            roles: ['ADMIN']
+            roles: ['admin']
+        },
+        {
+            route: 'manage-subjects',
+            icon: <Book />,
+            roles: ['admin']
         }
     ]
 
@@ -39,7 +50,7 @@ export default function Sidenav() {
                     <Tooltip key={i}>
                         <TooltipTrigger className='cursor-pointer' asChild>
                             <Link href={`/${item.route}`} key={i} className={cn(!isOpenObject?.isOpen && 'hidden')} prefetch={true}>
-                                {React.cloneElement(item.icon, { color: pathname.includes(item.route) ? 'blue' : 'black' })}
+                                {item.icon && React.cloneElement(item.icon as React.ReactElement<{ color?: string }>, { color: pathname.includes(item.route) ? 'blue' : 'black' })}
                             </Link>
                         </TooltipTrigger>
                         <TooltipContent><p className='capitalize'>{item?.route?.replaceAll('-', ' ')}</p></TooltipContent>
