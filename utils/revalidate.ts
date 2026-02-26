@@ -11,6 +11,11 @@ export async function revalidateClassRelated() {
     revalidateTag('class', 'max')
     revalidatePath('/manage-class')
 }
+export async function revalidateSubjectRelated() {
+    revalidateTag('subjects', 'max')
+    revalidatePath('/manage-subjects')
+}
+
 export async function revalidateClassMembersRelated(id: string | number) {
     // all class
     revalidateTag('class', 'max')
